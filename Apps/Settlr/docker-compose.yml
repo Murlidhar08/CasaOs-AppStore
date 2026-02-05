@@ -1,0 +1,53 @@
+name: chavda-settlr
+services:
+  main_app:
+    cpu_shares: 10
+    command: []
+    container_name: settlr-web
+    deploy:
+      resources:
+        limits:
+          memory: 10426736640
+        reservations:
+          devices: []
+    environment:
+      - BETTER_AUTH_SECRET=CBRi63R1uFOM7kBZVTwZ1H1rNkpfH4S5
+      - BETTER_AUTH_URL=<APPLICATION URL>
+      - DATABASE_URL=<DATABASE URL>
+      - DISCORD_CLIENT_ID=
+      - DISCORD_CLIENT_SECRET=
+      - FROM_EMAIL=
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - NEXT_PUBLIC_APP_NAME=Settlr
+      - NODE_ENV=production
+      - SMTP_HOST=
+      - SMTP_PASS=
+      - SMTP_PORT=
+      - SMTP_SECURE=true
+      - SMTP_USER=
+    image: chavda2772/settlr:latest
+    labels:
+      icon: https://cdn.jsdelivr.net/gh/Murlidhar08/settlr@develop/resources/light_logo.png
+    ports:
+      - target: 3000
+        published: '6854'
+        protocol: tcp
+    restart: unless-stopped
+    volumes: []
+    devices: []
+    cap_add: []
+    network_mode: bridge
+    privileged: false
+x-casaos:
+  author: self
+  category: self
+  hostname: ''
+  icon: https://cdn.jsdelivr.net/gh/Murlidhar08/settlr@develop/resources/light_logo.png
+  index: /
+  is_uncontrolled: false
+  port_map: '6854'
+  scheme: http
+  store_app_id: xenodochial_qutaiba
+  title:
+    custom: Settlr
