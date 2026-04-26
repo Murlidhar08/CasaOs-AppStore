@@ -1,86 +1,67 @@
 name: settlr
-
 services:
+  # Settlr Application
   settlr:
     container_name: settlr
     image: chavda2772/settlr:latest
-
     ports:
       - '6854:3000'
-
     restart: unless-stopped
-
+    labels:
+      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
     environment:
-      BETTER_AUTH_SECRET: 'CHANGE_ME_STRONG_SECRET'
-      BETTER_AUTH_URL: 'http://localhost:6854'
-      DATABASE_URL: 'postgresql://user:password@db:5432/settlr'
-      NEXT_PUBLIC_APP_NAME: 'Settlr'
-      NODE_ENV: 'production'
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_NAME=Settlr
+      - BETTER_AUTH_SECRET=CBRi63R1uFOM7kBZVTwZ1H1rNkpfH4S5
+      - BETTER_AUTH_URL=http://localhost:6854
+      - DATABASE_URL=postgresql://user:password@db:5432/settlr
 
       # Optional integrations
-      GOOGLE_CLIENT_ID: ''
-      GOOGLE_CLIENT_SECRET: ''
-      DISCORD_CLIENT_ID: ''
-      DISCORD_CLIENT_SECRET: ''
+      - GOOGLE_CLIENT_ID=<GOOGLE>
+      - GOOGLE_CLIENT_SECRET=<GOOGLE>
+      - DISCORD_CLIENT_ID="<DISCORD>"
+      - DISCORD_CLIENT_SECRET=<DISCORD>
 
       # Email (optional)
-      SMTP_HOST: ''
-      SMTP_PORT: '587'
-      SMTP_USER: ''
-      SMTP_PASS: ''
-      SMTP_SECURE: 'false'
-      FROM_EMAIL: ''
-
+      - FROM_EMAIL=<settlr@example.com>
+      - SMTP_HOST=mail.example.com
+      - SMTP_PASS=<password>
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER=settlr@example.com
     volumes:
-      - settlr_data:/app/data
-
+      - /DATA/AppData/$AppID/web:/app/data
     depends_on:
       - db
-
     healthcheck:
       test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
-    x-casaos:
-      ports:
-        - container: '3000'
-          description:
-            en_us: Settlr Web UI
-
+  # Settlr DB
   db:
+    cpu_shares: 90
     container_name: settlr-db
     image: postgres:16-alpine
-
     restart: unless-stopped
-
     environment:
-      POSTGRES_DB: settlr
-      POSTGRES_USER: settlr
-      POSTGRES_PASSWORD: settlrpassword
-
+      - POSTGRES_DB=settlr
+      - POSTGRES_USER=settlr
+      - POSTGRES_PASSWORD=settlrpassword
+    labels:
+      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
     volumes:
-      - settlr_db:/var/lib/postgresql/data
-
+      - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
 x-casaos:
   architectures:
     - amd64
     - arm64
     - arm
-
   author: Chavda Mahesh
   category: Finance
-
   title:
     en_us: Settlr
-
-  tagline:
-    en_us: Simple business accounting and transaction management system.
-
   description:
     en_us: |
-      Settlr is a self-hosted financial tracking application similar to Khatabook.
+      Settlr is a self-hosted financial tracking application.
 
       Features:
       - Track income & expenses
@@ -88,23 +69,18 @@ x-casaos:
       - Business-level accounting
       - Secure authentication
       - Clean and responsive UI
-
   developer: Chavda Mahesh
-
   icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
-
   main: settlr
   port_map: '6854'
-  index: /
-
   project_url: https://github.com/Murlidhar08/settlr
-
   screenshot_link:
     - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-1.png
     - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-2.png
-
+  store_app_id: settlr
+  tagline:
+    en_us: Simple business accounting and transaction management system.
   thumbnail: https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/icon.png
-
   tips:
     before_install:
       en_us: |
@@ -117,9 +93,3 @@ x-casaos:
         - DATABASE_URL
         - BETTER_AUTH_SECRET
         - OAuth credentials (optional)
-
-  store_app_id: settlr
-
-volumes:
-  settlr_data:
-  settlr_db:
