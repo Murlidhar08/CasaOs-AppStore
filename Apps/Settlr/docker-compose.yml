@@ -18,7 +18,7 @@ services:
       - DATABASE_URL=postgresql://user:password@db:5432/settlr
 
       # Better Auth
-      - BETTER_AUTH_URL=http://[IP_ADDRESS]:6854
+      - BETTER_AUTH_URL=http://localhost:6854
       - BETTER_AUTH_SECRET=faTlJkmKxeBUe6sNdiJ4QaNA6elg1elw
       - BETTER_AUTH_TRUSTED_ORIGINS=http://example.com,http://*.example.com
 
