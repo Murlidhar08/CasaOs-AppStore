@@ -15,7 +15,7 @@ services:
       - NEXT_PUBLIC_APP_DESCRIPTION="Settlr for managing personal finance"
 
       # Database
-      - DATABASE_URL=postgresql://username:dbpassword@server:5432/db_name
+      - DATABASE_URL=postgresql://settlr:settlrpassword@db:5432/settlr
 
       # Better Auth
       - BETTER_AUTH_URL=http://localhost:6854
@@ -38,10 +38,23 @@ services:
 
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
+    depends_on:
+      - db
     command: /bin/sh -c "npx prisma migrate deploy && npm start"
     healthcheck:
       test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
 
+  # Settlr DB
+  db:
+    container_name: settlr-db
+    image: postgres:17.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=settlr
+      - POSTGRES_USER=settlr
+      - POSTGRES_PASSWORD=settlrpassword
+    volumes:
+      - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
 x-casaos:
   architectures:
     - amd64
