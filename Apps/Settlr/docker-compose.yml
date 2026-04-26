@@ -12,15 +12,21 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_APP_NAME=Settlr
-      - BETTER_AUTH_SECRET=CBRi63R1uFOM7kBZVTwZ1H1rNkpfH4S5
-      - BETTER_AUTH_URL=http://localhost:6854
+      - NEXT_PUBLIC_APP_DESCRIPTION="Settlr for managing personal finance"
+
+      # Database
       - DATABASE_URL=postgresql://user:password@db:5432/settlr
 
+      # Better Auth
+      - BETTER_AUTH_URL=http://[IP_ADDRESS]:6854
+      - BETTER_AUTH_SECRET=faTlJkmKxeBUe6sNdiJ4QaNA6elg1elw
+      - BETTER_AUTH_TRUSTED_ORIGINS=http://example.com,http://*.example.com
+
       # Optional integrations
-      - GOOGLE_CLIENT_ID=<GOOGLE>
-      - GOOGLE_CLIENT_SECRET=<GOOGLE>
-      - DISCORD_CLIENT_ID=<DISCORD>
-      - DISCORD_CLIENT_SECRET=<DISCORD>
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - DISCORD_CLIENT_ID=
+      - DISCORD_CLIENT_SECRET=
 
       # Email (optional)
       - FROM_EMAIL=<settlr@example.com>
@@ -29,6 +35,7 @@ services:
       - SMTP_PORT=587
       - SMTP_SECURE=false
       - SMTP_USER=settlr@example.com
+
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
     depends_on:
