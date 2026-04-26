@@ -91,13 +91,13 @@ x-casaos:
 
   developer: Chavda Mahesh
 
-  icon: https://cdn.jsdelivr.net/gh/Murlidhar08/settlr@develop/resources/light_logo.png
+  icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
 
   main: settlr
   port_map: '6854'
   index: /
 
-  project_url: https://github.com/your-username/settlr
+  project_url: https://github.com/Murlidhar08/settlr
 
   screenshot_link:
     - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-1.png
