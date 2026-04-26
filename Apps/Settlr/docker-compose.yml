@@ -34,7 +34,7 @@ services:
     depends_on:
       - db
     healthcheck:
-      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
 
   # Settlr DB
   db:
@@ -48,6 +48,10 @@ services:
     volumes:
       - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
 x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
   author: Chavda Mahesh
   category: Finance
   title:
