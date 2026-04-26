@@ -8,7 +8,7 @@ services:
       - '6854:3000'
     restart: unless-stopped
     labels:
-      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
+      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon_with_bg.png
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_APP_NAME=Settlr
@@ -19,7 +19,7 @@ services:
       # Optional integrations
       - GOOGLE_CLIENT_ID=<GOOGLE>
       - GOOGLE_CLIENT_SECRET=<GOOGLE>
-      - DISCORD_CLIENT_ID="<DISCORD>"
+      - DISCORD_CLIENT_ID=<DISCORD>
       - DISCORD_CLIENT_SECRET=<DISCORD>
 
       # Email (optional)
@@ -38,7 +38,6 @@ services:
 
   # Settlr DB
   db:
-    cpu_shares: 90
     container_name: settlr-db
     image: postgres:16-alpine
     restart: unless-stopped
@@ -46,15 +45,9 @@ services:
       - POSTGRES_DB=settlr
       - POSTGRES_USER=settlr
       - POSTGRES_PASSWORD=settlrpassword
-    labels:
-      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon.png
     volumes:
       - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
 x-casaos:
-  architectures:
-    - amd64
-    - arm64
-    - arm
   author: Chavda Mahesh
   category: Finance
   title:
@@ -75,8 +68,13 @@ x-casaos:
   port_map: '6854'
   project_url: https://github.com/Murlidhar08/settlr
   screenshot_link:
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-1.png
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-2.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-1.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-2.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-3.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-4.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-5.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-6.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-7.png
   store_app_id: settlr
   tagline:
     en_us: Simple business accounting and transaction management system.
