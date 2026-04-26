@@ -1,78 +1,125 @@
-# https://github.com/IceWhaleTech/CasaOS-AppStore/blob/main/CONTRIBUTING.md
-
 name: settlr
+
 services:
   settlr:
     container_name: settlr
     image: chavda2772/settlr:latest
-    labels:
-      icon: https://cdn.jsdelivr.net/gh/Murlidhar08/settlr@develop/resources/light_logo.png
-    network_mode: bridge
+
     ports:
-      - target: 3000
-        published: "6854"
-        protocol: tcp
+      - '6854:3000'
+
     restart: unless-stopped
+
     environment:
-      - BETTER_AUTH_SECRET=CBRi63R1uFOM7kBZVTwZ1H1rNkpfH4S5
-      - BETTER_AUTH_URL=<APPLICATION URL>
-      - DATABASE_URL=<DATABASE URL>
-      - DISCORD_CLIENT_ID=
-      - DISCORD_CLIENT_SECRET=
-      - FROM_EMAIL=
-      - GOOGLE_CLIENT_ID=
-      - GOOGLE_CLIENT_SECRET=
-      - NEXT_PUBLIC_APP_NAME=Settlr
-      - NODE_ENV=production
-      - SMTP_HOST=
-      - SMTP_PASS=
-      - SMTP_PORT=
-      - SMTP_SECURE=true
-      - SMTP_USER=
+      BETTER_AUTH_SECRET: 'CHANGE_ME_STRONG_SECRET'
+      BETTER_AUTH_URL: 'http://localhost:6854'
+      DATABASE_URL: 'postgresql://user:password@db:5432/settlr'
+      NEXT_PUBLIC_APP_NAME: 'Settlr'
+      NODE_ENV: 'production'
+
+      # Optional integrations
+      GOOGLE_CLIENT_ID: ''
+      GOOGLE_CLIENT_SECRET: ''
+      DISCORD_CLIENT_ID: ''
+      DISCORD_CLIENT_SECRET: ''
+
+      # Email (optional)
+      SMTP_HOST: ''
+      SMTP_PORT: '587'
+      SMTP_USER: ''
+      SMTP_PASS: ''
+      SMTP_SECURE: 'false'
+      FROM_EMAIL: ''
+
+    volumes:
+      - settlr_data:/app/data
+
+    depends_on:
+      - db
+
     healthcheck:
-      test: curl --fail -s http://localhost:3000/health || exit 1
-      interval: 60s
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
+      interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+
     x-casaos:
       ports:
-        - container: "6854"
+        - container: '3000'
           description:
-            en_us: ""
+            en_us: Settlr Web UI
+
+  db:
+    container_name: settlr-db
+    image: postgres:16-alpine
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: settlr
+      POSTGRES_USER: settlr
+      POSTGRES_PASSWORD: settlrpassword
+
+    volumes:
+      - settlr_db:/var/lib/postgresql/data
+
 x-casaos:
   architectures:
     - amd64
     - arm64
     - arm
-  author: chavda mahesh
-  category: Financial App
+
+  author: Chavda Mahesh
+  category: Finance
+
+  title:
+    en_us: Settlr
+
+  tagline:
+    en_us: Simple business accounting and transaction management system.
+
   description:
     en_us: |
-      This is the settlr application
+      Settlr is a self-hosted financial tracking application similar to Khatabook.
 
-      🚨 Note: Check this note.
+      Features:
+      - Track income & expenses
+      - Manage parties and transactions
+      - Business-level accounting
+      - Secure authentication
+      - Clean and responsive UI
+
   developer: Chavda Mahesh
+
   icon: https://cdn.jsdelivr.net/gh/Murlidhar08/settlr@develop/resources/light_logo.png
-  index: /
+
   main: settlr
-  port_map: "6854"
-  project_url: https://github.com/mr-manuel/CasaOS-HomeAutomation-AppStore
+  port_map: '6854'
+  index: /
+
+  project_url: https://github.com/your-username/settlr
+
   screenshot_link:
     - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-1.png
     - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-2.png
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-3.png
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-4.png
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-5.png
-    - https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/screenshot-6.png
-  store_app_id: settlr
-  tagline:
-    en_us: Manage all types of time series data in a single, purpose-built database.
+
   thumbnail: https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/icon.png
+
   tips:
     before_install:
       en_us: |
-        The database will be reachable at port `6854`.
+        Default login will require configuration.
 
-        [Website](https://www.influxdata.com/settlr/) &bull; [Documentation](https://docs.influxdata.com/settlr/)
-  title:
-    en_us: Settlr
+        Access the app at:
+        http://<your-server-ip>:6854
+
+        Make sure to update:
+        - DATABASE_URL
+        - BETTER_AUTH_SECRET
+        - OAuth credentials (optional)
+
+  store_app_id: settlr
+
+volumes:
+  settlr_data:
+  settlr_db:
