@@ -43,7 +43,9 @@ services:
         condition: service_healthy
     networks:
       - settlr-net
-    command: ["sh", "-c", "npm run db:deploy && npm run db:generate && npm run dev"]
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:3000/health" ]
+    command: [ "sh", "-c", "npm run db:deploy && npm run db:generate && npm run dev" ]
 
   # Settlr Database
   db:
@@ -61,7 +63,7 @@ services:
     networks:
       - settlr-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U settlr -d settlr"]
+      test: [ "CMD-SHELL", "pg_isready -U settlr -d settlr" ]
       interval: 10s
       timeout: 5s
       retries: 5
