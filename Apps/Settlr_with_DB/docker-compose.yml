@@ -10,7 +10,7 @@ services:
     labels:
       icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon_with_bg.png
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - NEXT_PUBLIC_APP_NAME=Settlr
       - NEXT_PUBLIC_APP_DESCRIPTION="Settlr for managing personal finance"
 
@@ -23,10 +23,10 @@ services:
       - BETTER_AUTH_TRUSTED_ORIGINS=http://example.com,http://*.example.com
 
       # Optional integrations
-      - GOOGLE_CLIENT_ID=
-      - GOOGLE_CLIENT_SECRET=
-      - DISCORD_CLIENT_ID=
-      - DISCORD_CLIENT_SECRET=
+      - GOOGLE_CLIENT_ID=dummy
+      - GOOGLE_CLIENT_SECRET=dummy
+      - DISCORD_CLIENT_ID=dummy
+      - DISCORD_CLIENT_SECRET=dummy
 
       # Email (optional)
       - FROM_EMAIL=<settlr@example.com>
@@ -38,15 +38,20 @@ services:
 
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - settlr-net
-    command: /bin/sh -c "npm run db:deploy && npm start"
+    command: ["sh", "-c", "npm run db:deploy && npm run db:generate && npm run dev"]
 
   # Settlr Database
   db:
     container_name: settlr-db
     image: postgres:17.4
     restart: unless-stopped
+    ports:
+      - '5433:5432'
     environment:
       - POSTGRES_DB=settlr
       - POSTGRES_USER=settlr
