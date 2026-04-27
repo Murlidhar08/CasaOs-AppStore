@@ -38,23 +38,14 @@ services:
 
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
-    depends_on:
-      - db
-    command: /bin/sh -c "npx prisma migrate deploy && npm start"
-    healthcheck:
-      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
+    networks:
+      - settlr-net
+    command: /bin/sh -c "npm run db:deploy && npm start"
 
-  # Settlr DB
-  db:
-    container_name: settlr-db
-    image: postgres:17.4
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=settlr
-      - POSTGRES_USER=settlr
-      - POSTGRES_PASSWORD=settlrpassword
-    volumes:
-      - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
+networks:
+  settlr-net:
+    driver: bridge
+
 x-casaos:
   architectures:
     - amd64
@@ -75,22 +66,22 @@ x-casaos:
       - Secure authentication
       - Clean and responsive UI
   developer: Chavda Mahesh
-  icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon_with_bg.png
+  icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/icon_with_bg.png
   main: settlr
   port_map: '6854'
   project_url: https://github.com/Murlidhar08/settlr
   screenshot_link:
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-1.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-2.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-3.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-4.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-5.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-6.png
-    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/screenshot-7.png
-  store_app_id: settlr
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-1.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-2.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-3.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-4.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-5.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-6.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/screenshot-7.png
+  store_app_id: settlr-with-db
   tagline:
     en_us: Simple business accounting and transaction management system.
-  thumbnail: https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/settlr/icon.png
+  thumbnail: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr_with_DB/icon.png
   tips:
     before_install:
       en_us: |
@@ -100,6 +91,6 @@ x-casaos:
         http://<your-server-ip>:6854
 
         Make sure to update:
-        - DATABASE_URL
+        - DATABASE_URL (pre-configured for internal DB)
         - BETTER_AUTH_SECRET
         - OAuth credentials (optional)
