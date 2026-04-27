@@ -10,6 +10,7 @@ services:
     labels:
       icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Settlr/icon_with_bg.png
     environment:
+      # Application
       - NODE_ENV=production
       - NEXT_PUBLIC_APP_NAME=Settlr
       - NEXT_PUBLIC_APP_DESCRIPTION="Settlr for managing personal finance"
