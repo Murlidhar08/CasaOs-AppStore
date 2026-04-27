@@ -24,10 +24,10 @@ services:
       - BETTER_AUTH_TRUSTED_ORIGINS=http://example.com,http://*.example.com
 
       # Optional integrations
-      - GOOGLE_CLIENT_ID=
-      - GOOGLE_CLIENT_SECRET=
-      - DISCORD_CLIENT_ID=
-      - DISCORD_CLIENT_SECRET=
+      - GOOGLE_CLIENT_ID=dummy
+      - GOOGLE_CLIENT_SECRET=dummy
+      - DISCORD_CLIENT_ID=dummy
+      - DISCORD_CLIENT_SECRET=dummy
 
       # Email (optional)
       - FROM_EMAIL=<settlr@example.com>
@@ -39,7 +39,6 @@ services:
 
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
-    command: /bin/sh -c "npx prisma migrate deploy && npm start"
     healthcheck:
       test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
 
