@@ -1,0 +1,93 @@
+name: property-hub
+services:
+  # Property_Hub Application
+  property-hub:
+    container_name: property-hub-web
+    image: chavda2772/property-hub:4.5-beta
+    ports:
+      - '6655:3000'
+    restart: unless-stopped
+    labels:
+      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/icon_with_bg.png
+    environment:
+      # Application
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_NAME="Property Hub"
+      - NEXT_PUBLIC_APP_DESCRIPTION="Property Hub is your all-in-one platform to manage real estate listings, clients, and agents effortlessly."
+
+      # Database
+      - DATABASE_URL="postgresql://root:root@192.168.1.101:5432/property_hub"
+
+      # Better Auth
+      - BETTER_AUTH_URL=https://hub.chavdamahesh.online
+      - BETTER_AUTH_SECRET=lMD1eol2MrTxIZixGYyjwT0G0DQJ6oLJ
+      - BETTER_AUTH_TRUSTED_ORIGINS=https://*.chavdamahesh.online
+
+      # Optional integrations
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - DISCORD_CLIENT_ID=
+      - DISCORD_CLIENT_SECRET=
+
+      # Email (optional)
+      - FROM_EMAIL="Property_Hub <property-hub@example.com>"
+      - SMTP_HOST="mail.example.com"
+      - SMTP_PASS=PASSWORD
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER="property-hub@example.com"
+
+    volumes:
+      - /DATA/AppData/$AppID/web:/app/data
+      - /DATA/AppData/$AppID/uploads:/uploads
+    healthcheck:
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  author: Chavda Mahesh
+  category: Finance
+  title:
+    en_us: Property Hub
+  description:
+    en_us: |
+      Property Hub is a self-hosted financial tracking application.
+
+      Features:
+      - Track income & expenses
+      - Manage parties and transactions
+      - Business-level accounting
+      - Secure authentication
+      - Clean and responsive UI
+  developer: Chavda Mahesh
+  icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/icon_with_bg.png
+  main: property-hub
+  port_map: '6655'
+  project_url: https://github.com/Murlidhar08/property-hub
+  screenshot_link:
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-1.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-2.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-3.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-4.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-5.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-6.png
+    - https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/Property_Hub/screenshot-7.png
+  store_app_id: property-hub
+  tagline:
+    en_us: Simple business accounting and transaction management system.
+  thumbnail: https://raw.githubusercontent.com/mr-manuel/CasaOS-HomeAutomation-AppStore/latest/Apps/property-hub/icon.png
+  tips:
+    before_install:
+      en_us: |
+        Default login will require configuration.
+
+        Access the app at:
+        http://<your-server-ip>:6655
+
+        Make sure to update:
+        - DATABASE_URL
+        - BETTER_AUTH_SECRET
+        - OAuth credentials (optional)

@@ -16,31 +16,67 @@ services:
       - NEXT_PUBLIC_APP_DESCRIPTION="Settlr for managing personal finance"
 
       # Database
-      - DATABASE_URL=postgresql://username:dbpassword@server:5432/db_name
+      - DATABASE_URL=
 
       # Better Auth
-      - BETTER_AUTH_URL=http://localhost:6854
-      - BETTER_AUTH_SECRET=faTlJkmKxeBUe6sNdiJ4QaNA6elg1elw
-      - BETTER_AUTH_TRUSTED_ORIGINS=http://example.com,http://*.example.com
+      - BETTER_AUTH_URL=https://settlr.example.com
+      - BETTER_AUTH_SECRET=lMD1eol2MrTxIZixGYyjwT0G0DQJ6oLJ
+      - BETTER_AUTH_TRUSTED_ORIGINS=https://settlr-domain.example.com,https://*.example.com
 
       # Optional integrations
-      - GOOGLE_CLIENT_ID=dummy
-      - GOOGLE_CLIENT_SECRET=dummy
-      - DISCORD_CLIENT_ID=dummy
-      - DISCORD_CLIENT_SECRET=dummy
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - DISCORD_CLIENT_ID=
+      - DISCORD_CLIENT_SECRET=
 
       # Email (optional)
-      - FROM_EMAIL=<settlr@example.com>
-      - SMTP_HOST=mail.example.com
-      - SMTP_PASS=<password>
+      - FROM_EMAIL="Settlr <settlr@example.com>"
+      - SMTP_HOST="mail.example.com"
+      - SMTP_PASS=PASSWORD
       - SMTP_PORT=587
       - SMTP_SECURE=false
-      - SMTP_USER=settlr@example.com
+      - SMTP_USER="settlr@example.com"
 
     volumes:
       - /DATA/AppData/$AppID/web:/app/data
+    networks:
+      - settlr-network
     healthcheck:
-      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
+    depends_on:
+      settlr-migrate:
+        condition: service_completed_successfully
+
+  prisma-studio:
+    image: node:24.15.0
+    container_name: prisma-studio
+    working_dir: /app
+    volumes:
+      - /DATA/AppData/$AppID/studio:/app
+    command: npx prisma studio --port 5555 --browser none
+    ports:
+      - '5555:5555'
+    environment:
+      - DATABASE_URL="postgresql://postgres:postgres@example.com:5432/settlr_v2"
+    networks:
+      - settlr-network
+
+  settlr-migrate:
+    image: node:24.15.0
+    container_name: settlr-migrate
+    working_dir: /app
+    volumes:
+      - /DATA/AppData/$AppID/migration:/app
+    environment:
+      DATABASE_URL: 'postgresql://postgres:postgres@example.com:5432/settlr_v2'
+    networks:
+      - prisma-network
+    command: ['npx', 'prisma', 'migrate', 'deploy']
+    restart: 'no'
+
+networks:
+  settlr-network:
+    name: settlr-network
 
 x-casaos:
   architectures:
