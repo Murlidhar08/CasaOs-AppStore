@@ -1,4 +1,4 @@
-name: property-hub
+name: property-hub-with-db
 services:
   # Property_Hub Application
   property-hub:
