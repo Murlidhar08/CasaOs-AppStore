@@ -16,7 +16,7 @@ services:
       - NEXT_PUBLIC_APP_DESCRIPTION="Property Hub is your all-in-one platform to manage real estate listings, clients, and agents effortlessly."
 
       # Database
-      - DATABASE_URL="postgresql://[USERNAME]:[PASSWORD]@[DOMAIN]:5432/[DATABASE_NAME]"
+      - DATABASE_URL="postgresql://property_admin:Admin123@postgres_db:5432/property_hub?schema=public"
 
       # Better Auth
       - BETTER_AUTH_URL="https://hub.example.com"
@@ -41,15 +41,43 @@ services:
       - /DATA/AppData/$AppID/uploads:/uploads
     healthcheck:
       test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
+    depends_on:
+      property_db:
+        condition: service_healthy
     networks:
       - prisma-network
+
+  # Postgress database service
+  property_db:
+    container_name: property_db
+    environment:
+      - POSTGRES_DB=property_hub
+      - POSTGRES_PASSWORD=Admin123
+      - POSTGRES_USER=property_admin
+    hostname: property_db
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U property_admin -d property_hub
+      timeout: 2s
+      interval: 5s
+      retries: 20
+    image: postgres:17.4
+    labels:
+      icon: https://raw.githubusercontent.com/Murlidhar08/CasaOs-AppStore/refs/heads/main/Apps/property-hub/icon_with_bg.png
+    restart: always
+    volumes:
+      - /DATA/AppData/$AppID/db:/var/lib/postgresql/data
+    networks:
+      - prisma-network
+    privileged: false
 
   # Prisma Studio service for database access
   prisma-studio:
     image: node:24-alpine
     container_name: prisma-studio
     environment:
-      - DATABASE_URL="postgresql://[USERNAME]:[PASSWORD]@[DOMAIN]:5432/[DATABASE_NAME]"
+      - DATABASE_URL="postgresql://property_admin:Admin123@property_db:5432/property_hub?schema=public"
     ports:
       - '5555:5555'
     command:
@@ -58,6 +86,9 @@ services:
     working_dir: /app
     networks:
       - prisma-network
+    depends_on:
+      property_db:
+        condition: service_healthy
 
 networks:
   prisma-network:
