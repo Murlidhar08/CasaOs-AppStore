@@ -51,7 +51,7 @@ services:
     environment:
       - DATABASE_URL="postgresql://[USERNAME]:[PASSWORD]@[DOMAIN]:5432/[DATABASE_NAME]"
     ports:
-      - '5555:5555'
+      - '6656:5555'
     command:
       - npx prisma studio --port 5555 --browser none
     restart: unless-stopped
